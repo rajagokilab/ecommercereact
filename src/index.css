@@ -1,7 +1,20 @@
+:root {
+  --bg: #f9fafb;
+  --text: #111827;
+  --card: #fff;
+}
+
+.dark {
+  --bg: #1f2937;
+  --text: #f9fafb;
+  --card: #374151;
+}
+
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background: #f9fafb;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .container {
@@ -11,7 +24,7 @@ body {
 }
 
 .card {
-  background: #fff;
+  background: var(--card);
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;

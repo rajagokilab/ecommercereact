@@ -1,33 +1,44 @@
-import { useAuth } from "./context/AuthContext";
-import LoginForm from "./components/LoginForm";
-import ExamPage from "./components/ExamPage";
+import { useEffect } from "react";
+import Header from "./components/Header";
+import WorkoutForm from "./components/WorkoutForm";
+import WorkoutList from "./components/WorkoutList";
+import { PreferencesProvider } from "./context/PreferencesContext";
+import useLocalStorage from "./hooks/useLocalStorage";
+import useWindowSize from "./hooks/useWindowSize";
 
-function StudentView() {
-  return <ExamPage />;
-}
+function FitnessApp() {
+  const [workouts, setWorkouts] = useLocalStorage("fitness_workouts", []);
+  const size = useWindowSize();
 
-function TeacherView() {
+  function addWorkout(workout) {
+    setWorkouts([workout, ...workouts]);
+  }
+
+  // Reminder every hour
+  useEffect(() => {
+    const interval = setInterval(() => {
+      alert("⏰ Time to log your workout or take a short walk!");
+    }, 60 * 60 * 1000); // 1 hour
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="card">
-      <h2>Teacher Dashboard</h2>
-      <p>Here teacher can manage exams (feature expansion later).</p>
+    <div className="container">
+      <Header />
+      <p>
+        Screen size: {size.width}x{size.height} → Layout:{" "}
+        {size.width < 600 ? "Mobile" : "Desktop"}
+      </p>
+      <WorkoutForm onAdd={addWorkout} />
+      <WorkoutList workouts={workouts} />
     </div>
   );
 }
 
 export default function App() {
-  const { user, logout } = useAuth();
-
-  if (!user) return <LoginForm />;
-
   return (
-    <div className="container">
-      <header style={{ display: "flex", justifyContent: "space-between" }}>
-        <h1>Online Exam System</h1>
-        <button className="btn" onClick={logout}>Logout</button>
-      </header>
-
-      {user.role === "teacher" ? <TeacherView /> : <StudentView />}
-    </div>
+    <PreferencesProvider>
+      <FitnessApp />
+    </PreferencesProvider>
   );
 }
