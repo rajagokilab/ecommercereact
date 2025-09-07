@@ -1,20 +1,20 @@
-import { useTheme } from "../context/ThemeContext";
+import { useCurrency } from "../context/CurrencyContext";
 
 export default function Header() {
-  const { theme, toggleTheme } = useTheme();
+  const { currency, setCurrency } = useCurrency();
 
   return (
-    <header style={{ display: "flex", justifyContent: "space-between" }}>
-      <div>
-        <h1>Task Manager</h1>
-        <p style={{ fontSize: "0.9rem", color: "var(--muted)" }}>
-          Lightweight to-do with auto-sync
-        </p>
-      </div>
-      <div>
-        <span style={{ marginRight: "0.5rem" }}>Theme: {theme}</span>
-        <button className="btn" onClick={toggleTheme}>Toggle</button>
-      </div>
+    <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <h1>Crypto Price Tracker</h1>
+      <select
+        value={currency}
+        onChange={(e) => setCurrency(e.target.value)}
+        className="input"
+      >
+        <option value="usd">USD</option>
+        <option value="inr">INR</option>
+        <option value="gbp">GBP</option>
+      </select>
     </header>
   );
 }
