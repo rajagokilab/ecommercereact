@@ -1,20 +1,31 @@
-import { usePreferences } from "../context/PreferencesContext";
+import { useAuth } from "../context/AuthContext";
+import useCart from "../hooks/useCart";
 
 export default function Header() {
-  const { theme, setTheme, units, setUnits } = usePreferences();
+  const { user, login, logout } = useAuth();
+  const { cart } = useCart();
 
   return (
     <header className="card" style={{ display: "flex", justifyContent: "space-between" }}>
-      <h1>Fitness Tracker</h1>
+      <h1>ShopEasy 🛒</h1>
       <div>
-        <select value={theme} onChange={(e) => setTheme(e.target.value)} className="input">
-          <option value="light">🌞 Light</option>
-          <option value="dark">🌙 Dark</option>
-        </select>
-        <select value={units} onChange={(e) => setUnits(e.target.value)} className="input" style={{ marginLeft: "0.5rem" }}>
-          <option value="metric">Metric (kg, km)</option>
-          <option value="imperial">Imperial (lb, miles)</option>
-        </select>
+        <span>Cart: {cart.reduce((sum, i) => sum + i.qty, 0)} items</span>
+        {user ? (
+          <>
+            <span style={{ marginLeft: "1rem" }}>Hi, {user.username}</span>
+            <button className="btn" onClick={logout} style={{ marginLeft: "0.5rem" }}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            className="btn primary"
+            style={{ marginLeft: "1rem" }}
+            onClick={() => login("testuser", "123")}
+          >
+            Login
+          </button>
+        )}
       </div>
     </header>
   );
